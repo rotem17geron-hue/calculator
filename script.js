@@ -106,7 +106,13 @@ function buttonPress (button) {
             break;
         
         default:
-            numberPressed(button);
+            if (button !== ".") {
+                numberPressed(button);
+            } else {
+                if ((operator === "" && !dotRegex.test(num1)) || (operator !== "" && !dotRegex.test(num2))) {
+                    numberPressed(button);
+                } 
+            }
             break;
     }
 
@@ -118,6 +124,7 @@ function buttonPress (button) {
 
 const buttons = [['AC', "", "", ":"], ["7", "8", "9", "*"], ["4", "5", "6", "-"], ["1", "2", "3", "+"], ["0", ".", "", "="]]
 const operatorsRegex = /\+|\-|\*|\:/;
+const dotRegex = /\./;
 
 let num1 = "";
 let num2 = "";
