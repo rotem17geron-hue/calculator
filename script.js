@@ -94,14 +94,15 @@ function buttonPress (button) {
             break;
 
         case operatorsRegex.test(button):
-            operatorPressed(button);
+            if ((num1 !== "" && operator === "") || (num1 !== "" && operator !== "" && num2 !== "")) {
+                operatorPressed(button);
+            }
             break;
 
         case /=/.test(button):
-            if (num2 === "") {
-                break;
+            if (num2 !== "") {
+                equalsPressed();
             }
-            equalsPressed();
             break;
         
         default:
