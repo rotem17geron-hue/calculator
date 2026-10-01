@@ -56,6 +56,7 @@ function numberPressed(button){
 }
 
 function operatorPressed(button){
+    freshStart = true;
     if (operator === "") {
         updateDisplay(button);
         operator = button;
