@@ -15,6 +15,8 @@ function divide (num1, num2) {
 }
 
 function operate (num1, num2, operator) {
+    num1 = parseFloat(num1);
+    num2 = parseFloat(num2);
     switch (operator) {
         case "+":
             return add(num1, num2);
@@ -28,14 +30,75 @@ function operate (num1, num2, operator) {
 }
 
 function updateDisplay (value) {
-    document.getElementById("screen").innerHTML = value;
+    currentDisplay = document.getElementById("screen").innerHTML;
+    document.getElementById("screen").innerHTML = currentDisplay + value;
 }
 
-function buttonPress () {
+function clearDisplay(){
+    document.getElementById("screen").innerHTML = "";
+}
 
+
+function buttonPress (button) {
+    switch (true) {
+        case button === "":
+            break;
+
+        case /AC/.test(button):
+            clearDisplay();
+            num1 = "";
+            num2 = "";
+            operator = "";
+            break;
+
+        case operatorsRegex.test(button):
+            console.log("OPERATOR!!!!")
+            updateDisplay(button);
+            if (operator === "") {
+                operator = button;
+            } else {
+                console.log(num1 + " " + num2 + " " + operator);
+                const result = operate(num1, num2, operator);
+                clearDisplay();
+                num1 = `${result}`;
+                num2 = "";
+                operator = button;
+                updateDisplay(result + button);
+                break;
+            }
+            break;
+
+        case /=/.test(button):
+            console.log(num1 + " " + num2 + " " + operator);
+            const result = operate(num1, num2, operator);
+            clearDisplay();
+            updateDisplay(result);
+            num1 = "";
+            num2 = "";
+            operator = "";
+            break;
+        
+        default:
+            updateDisplay(button);
+            if (operator === "") {
+                num1 = num1 + button;
+            } else {
+                num2 = num2 + button
+            }
+            break;
+    }
+
+    console.log(`num1: ${num1}`)
+    console.log(`num2: ${num2}`)
+    console.log(`operator: ${operator}`)
 }
 
 const buttons = [['AC', "", "", ":"], ["7", "8", "9", "*"], ["4", "5", "6", "-"], ["1", "2", "3", "+"], ["0", ".", "", "="]]
+const operatorsRegex = /\+|\-|\*|\:/;
+
+let num1 = "";
+let num2 = "";
+let operator = "";
 
 let grid = document.createElement("div");
 document.body.appendChild(grid);
@@ -49,7 +112,10 @@ for (let rowNumber = 0; rowNumber < 5; rowNumber++) {
     for (let index = 0; index < 4; index++) {
         const cell = document.createElement("div");
         row.appendChild(cell);
-        cell.classList.add('cell')
-        cell.innerHTML = buttons[rowNumber][index]
+        cell.classList.add('cell');
+        cell.innerHTML = buttons[rowNumber][index];
+        cell.addEventListener('click', function(){
+            buttonPress(cell.innerHTML);
+        });
     }
 }
