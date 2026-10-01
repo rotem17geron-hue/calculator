@@ -11,6 +11,10 @@ function multiply (num1, num2) {
 }
 
 function divide (num1, num2) {
+    if (num2 === 0) {
+        console.log("zero");
+        return "Fuck You";
+    }
     return num1 / num2;
 }
 
@@ -94,6 +98,9 @@ function buttonPress (button) {
             break;
 
         case operatorsRegex.test(button):
+            if (num1 === "Fuck You") {
+                break;
+            }
             if ((num1 !== "" && operator === "") || (num1 !== "" && operator !== "" && num2 !== "")) {
                 operatorPressed(button);
             }
@@ -108,11 +115,9 @@ function buttonPress (button) {
         default:
             if (button !== ".") {
                 numberPressed(button);
-            } else {
-                if ((operator === "" && !dotRegex.test(num1)) || (operator !== "" && !dotRegex.test(num2))) {
+            } else if ((operator === "" && !dotRegex.test(num1)) || (operator !== "" && !dotRegex.test(num2))) {
                     numberPressed(button);
-                } 
-            }
+                }
             break;
     }
 
@@ -122,7 +127,7 @@ function buttonPress (button) {
     console.log(`operator: ${operator}`)
 }
 
-const buttons = [['AC', "", "", ":"], ["7", "8", "9", "*"], ["4", "5", "6", "-"], ["1", "2", "3", "+"], ["0", ".", "", "="]]
+const buttons = [['AC', "", "", ":"], ["7", "8", "9", "*"], ["4", "5", "6", "-"], ["1", "2", "3", "+"], ["0", ".", "", "="]];
 const operatorsRegex = /\+|\-|\*|\:/;
 const dotRegex = /\./;
 
