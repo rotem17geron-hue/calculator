@@ -38,6 +38,46 @@ function clearDisplay(){
     document.getElementById("screen").innerHTML = "";
 }
 
+function numberPressed(button){
+    if (freshStart) {
+        updateDisplay(button);
+        if (operator === "") {
+            num1 = num1 + button;
+        } else {
+            num2 = num2 + button;
+        }   
+    } else {
+        clearDisplay();
+        updateDisplay(button);
+        num1 = button;
+        freshStart = true;
+    }
+    
+}
+
+function operatorPressed(button){
+    if (operator === "") {
+        updateDisplay(button);
+        operator = button;
+    } else {
+        const result = operate(num1, num2, operator);
+        clearDisplay();
+        num1 = `${result}`;
+        num2 = "";
+        operator = button;
+        updateDisplay(result + button);
+    }
+}
+
+function equalsPressed(){
+    const result = operate(num1, num2, operator);
+    clearDisplay();
+    updateDisplay(result);
+    num1 = result;
+    num2 = "";
+    operator = "";
+    freshStart = false;
+}
 
 function buttonPress (button) {
     switch (true) {
@@ -49,45 +89,26 @@ function buttonPress (button) {
             num1 = "";
             num2 = "";
             operator = "";
+            freshStart = true;
             break;
 
         case operatorsRegex.test(button):
-            console.log("OPERATOR!!!!")
-            updateDisplay(button);
-            if (operator === "") {
-                operator = button;
-            } else {
-                console.log(num1 + " " + num2 + " " + operator);
-                const result = operate(num1, num2, operator);
-                clearDisplay();
-                num1 = `${result}`;
-                num2 = "";
-                operator = button;
-                updateDisplay(result + button);
-                break;
-            }
+            operatorPressed(button);
             break;
 
         case /=/.test(button):
-            console.log(num1 + " " + num2 + " " + operator);
-            const result = operate(num1, num2, operator);
-            clearDisplay();
-            updateDisplay(result);
-            num1 = "";
-            num2 = "";
-            operator = "";
+            if (num2 === "") {
+                break;
+            }
+            equalsPressed();
             break;
         
         default:
-            updateDisplay(button);
-            if (operator === "") {
-                num1 = num1 + button;
-            } else {
-                num2 = num2 + button
-            }
+            numberPressed(button);
             break;
     }
 
+    //debugging
     console.log(`num1: ${num1}`)
     console.log(`num2: ${num2}`)
     console.log(`operator: ${operator}`)
@@ -99,6 +120,7 @@ const operatorsRegex = /\+|\-|\*|\:/;
 let num1 = "";
 let num2 = "";
 let operator = "";
+let freshStart = true;
 
 let grid = document.createElement("div");
 document.body.appendChild(grid);
