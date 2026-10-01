@@ -64,6 +64,10 @@ function operatorPressed(button){
     if (operator === "") {
         updateDisplay(button);
         operator = button;
+    } else if (num2 === "") {
+        operator = button;
+        clearDisplay();
+        updateDisplay(num1 + operator);
     } else {
         const result = operate(num1, num2, operator);
         clearDisplay();
@@ -98,12 +102,10 @@ function buttonPress (button) {
             break;
 
         case operatorsRegex.test(button):
-            if (num1 === "Fuck You") {
+            if (num1 === "Fuck You" || (num1 === "" && operator === "" && num2 === "")) {
                 break;
             }
-            if ((num1 !== "" && operator === "") || (num1 !== "" && operator !== "" && num2 !== "")) {
-                operatorPressed(button);
-            }
+            operatorPressed(button);
             break;
 
         case /=/.test(button):
